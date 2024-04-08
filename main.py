@@ -89,7 +89,6 @@ def _requests(url):
                 print(f'[green]{time_now()},[/green] Url: {url}, Status: {response.status_code}')
                 randtime = random.randint(5,10)
                 time.sleep(randtime)
-                return None
         except Exception as e:
             print(f'[red]{time_now()},[/red] Error [REQUEST]: {e}')
             time.sleep(5)
@@ -514,7 +513,7 @@ def main():
             domain = 'DE'
             info_de = _details(asin, domain)
             title_de = info_de['TITLE']
-            price_de = info_de['PRICE']
+            price_de = info_de.get('PRICE', None)
             if not price_de:
                 info_de = details_from_cart(asin, domain)
             if info_nl['PRICE'] and info_nl['PRICE'] <= info_de['PRICE']:
