@@ -77,7 +77,7 @@ def _requests(url):
         HEADERS['Authority'] = 'www.amazon.it'
     while True:
         try:
-            HEADERS['User-Agent'] = random.choice(USER_AGENTS)
+            HEADERS['User-Agent'] = get_UA()
             response = httpx.get(url, headers=HEADERS)
             if response.status_code == 200:
                 print(f'[green]{time_now()},[/green] Url: {url}, Status: {response.status_code}')
@@ -613,6 +613,15 @@ def main():
         
     pass
 
+def get_UA():
+    result = random.choice(USER_AGENTS)
+    if os.path.exists('userAgent.txt'):
+        with open('userAgent.txt', 'r') as f:
+            ua = f.readlines()
+            ua = [x.strip() for x in ua]
+            result = random.choice(ua)
+    return result
+
 if __name__=="__main__":
     while True:
         try:
@@ -624,3 +633,4 @@ if __name__=="__main__":
             error_msg = f'Error: {e}'
             print(f'[red]{time_now()},[/red] {error_msg}')
             time.sleep(60)
+    
