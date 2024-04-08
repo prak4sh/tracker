@@ -90,7 +90,7 @@ def _requests(url):
                 print(f'[green]{time_now()},[/green] Url: {url}, Status: {response.status_code}')
                 randtime = random.randint(5,10)
                 time.sleep(randtime)
-                if not START:
+                if not START and 'add.html' not in url:
                     break
         except Exception as e:
             print(f'[red]{time_now()},[/red] Error [REQUEST]: {e}')
