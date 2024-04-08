@@ -89,6 +89,7 @@ def _requests(url):
                 print(f'[green]{time_now()},[/green] Url: {url}, Status: {response.status_code}')
                 randtime = random.randint(5,10)
                 time.sleep(randtime)
+                return None
         except Exception as e:
             print(f'[red]{time_now()},[/red] Error [REQUEST]: {e}')
             time.sleep(5)
