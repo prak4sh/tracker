@@ -409,8 +409,6 @@ def send_notification(msg, info ,status):
     delivery = info.get('DELIVERY_DATE', ':question:')
     if START:
         print_info('This is first time')
-    else:
-        START = False
     if status == 'stock':
         webhook = STOCK_WEBHOOK
     elif status == 'price':
@@ -419,7 +417,7 @@ def send_notification(msg, info ,status):
         webhook = DELIVERY_WEBHOOK
     else:
         return None
-    if SEND_NOTIFICATION:
+    if SEND_NOTIFICATION and not START:
         webhook = DiscordWebhook(url=webhook, rate_limit_retry=True)
         embed = DiscordEmbed(title=title, url=url ,color='03b2f8')
         embed.set_thumbnail(url=image)
