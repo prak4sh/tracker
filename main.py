@@ -420,7 +420,7 @@ def send_notification(msg, info ,status):
         webhook = DiscordWebhook(url=webhook, rate_limit_retry=True)
         embed = DiscordEmbed(title=title, url=url ,color='03b2f8')
         embed.set_thumbnail(url=image)
-        embed.set_author(name="prakash", url="https://fiverr.com/prakashtech250")
+        embed.set_author(name="prakash", url="")
         embed.set_timestamp()
         embed.add_embed_field(name='Status', value=msg, inline=False)
         embed.add_embed_field(name='ASIN', value=asin, inline=True)
@@ -550,7 +550,7 @@ def main():
             title_db = database_list[0].get('TITLE', None)
             url_db = database_list[0].get('URL', None)
             price_db = database_list[0].get('PRICE', None)
-            changes_per = database_list[0].get('CHANGES_PERCENT', 0)
+            changes_per = database_list[0].get('CHANGE_PERCENT', 0)
             delivery_db = database_list[0].get('DELIVERY_DATE', None)
             if title_db is None or pd.isna(title_db):
                 title_db = None
