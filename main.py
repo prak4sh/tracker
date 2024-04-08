@@ -297,6 +297,7 @@ def _details(asin, domain):
             'DELIVERY_DATE': None,
             'IMAGE': None
         }
+    print(info)
     return info
 
 def details_from_cart(asin,domain):
@@ -507,7 +508,7 @@ def main():
             domain = 'NL'
             info_nl = _details(asin, domain)
             title_nl = info_nl['TITLE']
-            price_nl = info_nl['PRICE']
+            price_nl = info_nl.get('PRICE', None)
             if not price_nl:
                 info_nl = details_from_cart(asin, domain)
 
@@ -623,11 +624,25 @@ def get_UA():
             result = random.choice(ua)
     return result
 
+def time_spend(start_time):
+    now = datetime.now()
+    delta = now - start_time
+    delta_sec = delta.total_seconds()
+    delta_min = delta_sec / 60
+    delta_hrs = delta_min / 60
+    if delta_sec < 60:
+        return "{:.2f} sec".format(delta_sec)
+    elif delta_min > 1 and delta_min < 60:
+        return "{:.2f} min".format(delta_min)
+    elif delta_hrs > 1 and delta_hrs < 60:
+        return "{:.2f} hrs".format(delta_hrs) 
+
 if __name__=="__main__":
     while True:
         try:
+            start_time = datetime.now()
             main()
-            print_info('Script ran successfully')
+            print_info(f'Script completed successfully in {time_spend(start_time)}')
             print('='*50)
             time.sleep(6)
         except Exception as e:
