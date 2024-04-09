@@ -26,6 +26,7 @@ BASE.auth()
 DELIVERY_WEBHOOK = os.getenv('DELIVERY_WEBHOOK')
 STOCK_WEBHOOK = os.getenv('STOCK_WEBHOOK')
 PRICE_WEBHOOK = os.getenv('PRICE_WEBHOOK')
+LOG_WEBHOOK = os.getenv('LOG_WEBHOOK')
 SEND_NOTIFICATION = True
 
 PRODUCT_TABLE = 'Products'
@@ -416,6 +417,8 @@ def send_notification(msg, info ,status):
         webhook = PRICE_WEBHOOK
     elif status == 'delivery':
         webhook = DELIVERY_WEBHOOK
+    elif status == 'log':
+        webhook = LOG_WEBHOOK
     else:
         return None
     if SEND_NOTIFICATION and not START:
@@ -437,7 +440,19 @@ def send_notification(msg, info ,status):
             print(f'[green]{time_now()},[/green] Notification has been sent to discord.')
         else:
             print(f'[red]{time_now()},[/red] Error on sending notification to discord')
-
+            
+def log_notification(msg):
+    webhook = LOG_WEBHOOK
+    webhook = DiscordWebhook(url=webhook, rate_limit_retry=True)
+    embed = DiscordEmbed(title='Task Completed', description=msg,color='355E3B')
+    embed.set_timestamp()
+    webhook.add_embed(embed)
+    response = webhook.execute()
+    if response.status_code == 200:
+        print(f'[green]{time_now()},[/green] Notification has been sent to discord.')
+    else:
+        print(f'[red]{time_now()},[/red] Error on sending notification to discord')
+    
 def update_data_to_database(infoList, df, table_name, ref):
     if len(infoList) > 0:   
         for column in PRODUCTS_COLUMNS:
@@ -494,6 +509,7 @@ def main():
     global notified_stock
     global START
     global SEATABLE_DF
+    start_time = datetime.now()
     SEATABLE_DF = seatable_dataframe(PRODUCT_TABLE, PRODUCTS_COLUMNS)
     all_asins = get_asins(SEATABLE_DF)
     all_data = []
@@ -612,7 +628,9 @@ def main():
         time.sleep(random.randint(2,5))
     info_to_database(all_data) 
     START = False
-        
+    msg = f'Total Asins: {len(all_asins)}, Time Spent: {time_spend(start_time)}'   
+    print_info(msg) 
+    log_notification(msg)
     pass
 
 def get_UA():
@@ -640,11 +658,9 @@ def time_spend(start_time):
 if __name__=="__main__":
     while True:
         try:
-            start_time = datetime.now()
             main()
-            print_info(f'Script completed successfully in {time_spend(start_time)}')
             print('='*50)
-            time.sleep(6)
+            time.sleep(60)
         except Exception as e:
             error_msg = f'Error: {e}'
             print(f'[red]{time_now()},[/red] {error_msg}')
