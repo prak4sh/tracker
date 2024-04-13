@@ -298,7 +298,6 @@ def _details(asin, domain):
             'DELIVERY_DATE': None,
             'IMAGE': None
         }
-    print(info)
     return info
 
 def details_from_cart(asin,domain):
@@ -625,6 +624,7 @@ def main():
         if len(all_data) >= 50:
             info_to_database(all_data)
             all_data = []
+        print(info)
         time.sleep(random.randint(2,5))
     info_to_database(all_data) 
     START = False
