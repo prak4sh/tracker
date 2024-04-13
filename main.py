@@ -23,6 +23,8 @@ SEATABLE_URL = 'https://cloud.seatable.io'
 BASE = Base(SEATABLE_API, SEATABLE_URL)
 BASE.auth()
 
+DELAY = 60
+
 DELIVERY_WEBHOOK = os.getenv('DELIVERY_WEBHOOK')
 STOCK_WEBHOOK = os.getenv('STOCK_WEBHOOK')
 PRICE_WEBHOOK = os.getenv('PRICE_WEBHOOK')
@@ -660,9 +662,9 @@ if __name__=="__main__":
         try:
             main()
             print('='*50)
-            time.sleep(60)
+            time.sleep(DELAY)
         except Exception as e:
             error_msg = f'Error: {e}'
             print(f'[red]{time_now()},[/red] {error_msg}')
-            time.sleep(60)
+            time.sleep(DELAY)
     
