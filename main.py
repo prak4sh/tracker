@@ -442,10 +442,16 @@ def send_notification(msg, info ,status):
         else:
             print(f'[red]{time_now()},[/red] Error on sending notification to discord')
             
-def log_notification(msg):
+def log_notification(msg, status=1):
+    if status == 1:
+        c = '355E3B'
+        t = 'Task Completed !!!'
+    else:
+        c = 'ff2222'
+        t = 'Error Found !!!'
     webhook = LOG_WEBHOOK
     webhook = DiscordWebhook(url=webhook, rate_limit_retry=True)
-    embed = DiscordEmbed(title='Task Completed', description=msg,color='355E3B')
+    embed = DiscordEmbed(title=t, description=msg,color=c)
     embed.set_timestamp()
     webhook.add_embed(embed)
     response = webhook.execute()
@@ -632,7 +638,7 @@ def main():
     START = False
     msg = f'Total Asins: {len(all_asins)}, Time Spent: {time_spend(start_time)}'   
     print_info(msg) 
-    log_notification(msg)
+    log_notification(msg, 1)
     pass
 
 def get_UA():
@@ -666,5 +672,6 @@ if __name__=="__main__":
         except Exception as e:
             error_msg = f'Error: {e}'
             print(f'[red]{time_now()},[/red] {error_msg}')
+            log_notification(error_msg, 0)
             time.sleep(DELAY)
     
