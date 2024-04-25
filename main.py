@@ -23,7 +23,7 @@ SEATABLE_URL = 'https://cloud.seatable.io'
 BASE = Base(SEATABLE_API, SEATABLE_URL)
 BASE.auth()
 
-DELAY = 60
+DELAY = 60 * 60
 
 DELIVERY_WEBHOOK = os.getenv('DELIVERY_WEBHOOK')
 STOCK_WEBHOOK = os.getenv('STOCK_WEBHOOK')
@@ -664,7 +664,8 @@ def time_spend(start_time):
         return "{:.2f} hrs".format(delta_hrs) 
 
 if __name__=="__main__":
-    while True:
+    main()
+    while False:
         try:
             main()
             print('='*50)
