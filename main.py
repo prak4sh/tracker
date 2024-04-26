@@ -633,7 +633,7 @@ def main():
                         send_notification(rise_msg, info, 'price')
                         not1, not2, not3, not4, not5 = False, False, False, False, True   
         all_data.append(info)
-        if len(all_data) >= 3:
+        if len(all_data) >= 50:
             info_to_database(all_data)
             all_data = []
         print(info)
