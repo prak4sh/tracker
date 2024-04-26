@@ -24,6 +24,7 @@ BASE = Base(SEATABLE_API, SEATABLE_URL)
 BASE.auth()
 
 DELAY = 60 * 60
+DEBUG = False
 
 DELIVERY_WEBHOOK = os.getenv('DELIVERY_WEBHOOK')
 STOCK_WEBHOOK = os.getenv('STOCK_WEBHOOK')
@@ -483,6 +484,7 @@ def update_data_to_database(infoList, df, table_name, ref):
         for update_rows_part in update_rows_parts:
             update_count += len(update_rows_part)
             if len(update_rows_part) > 0:
+                print(update_rows_part)
                 BASE.batch_update_rows(table_name, rows_data=update_rows_part)
                 print_info(f'Number of rows updated: {update_count}', 2)
             else:
@@ -577,6 +579,8 @@ def main():
             price_db = database_list[0].get('PRICE', None)
             changes_per = database_list[0].get('CHANGE_PERCENT', 0)
             delivery_db = database_list[0].get('DELIVERY_DATE', None)
+            if delivery_db is None or pd.isna(delivery_db):
+                delivery_db = None
             if title_db is None or pd.isna(title_db):
                 title_db = None
             if not price_db:
@@ -629,7 +633,7 @@ def main():
                         send_notification(rise_msg, info, 'price')
                         not1, not2, not3, not4, not5 = False, False, False, False, True   
         all_data.append(info)
-        if len(all_data) >= 50:
+        if len(all_data) >= 3:
             info_to_database(all_data)
             all_data = []
         print(info)
@@ -664,8 +668,9 @@ def time_spend(start_time):
         return "{:.2f} hrs".format(delta_hrs) 
 
 if __name__=="__main__":
-    main()
-    while False:
+    if DEBUG:
+        main()
+    while not DEBUG:
         try:
             main()
             print('='*50)
